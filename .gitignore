@@ -45,6 +45,3 @@ uploads/
 # React specific
 *.cache/
 .eslintcache
-
-package-lock.json
-package.json

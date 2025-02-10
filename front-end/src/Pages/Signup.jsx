@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { StoreContext } from '../context/Context'
 import { toast } from 'react-toastify'
@@ -18,6 +18,7 @@ const Signup = () => {
     otp: ''
   })
   const [isLoading, setisLoading] = useState(false)
+  const Navigate = useNavigate()
 
   const ChangeHandler = (e) => {
     setformdata({
@@ -43,7 +44,6 @@ const Signup = () => {
     formdatas.append('otp', formdata.otp)
 
     for (let [key, value] of formdatas.entries()) {
-      console.log(`${key}: ${value}`);
     }
 
     try {
@@ -53,8 +53,8 @@ const Signup = () => {
           'Content-Type': 'application/json'
         }
       })
-      console.log(response)
       toast.success(response.data.message)
+      Navigate('/login')
     } catch (error) {
       setisLoading(false)
       if (error.response && error.response.data && error.response.data.message) {
@@ -85,15 +85,13 @@ const Signup = () => {
     settime(30)
 
     try {
-      const responce = await axios.post(`${apiURL}/api/otp/send-otp`, formdata, {
+      await axios.post(`${apiURL}/api/otp/send-otp`, formdata, {
         withCredentials: true,
         headers: {
           'Content-Type': 'application/json'
         }
       })
-      console.log(responce)
     } catch (error) {
-      console.log(error)
       if (error.response && error.response.data && error.response.data.message) {
         toast.error(error.response.data.message);
       }
@@ -130,7 +128,11 @@ const Signup = () => {
                   type="text"
                   name='username'
                   value={formdata.username}
-                  onChange={ChangeHandler}
+                  onChange={(e) => {
+                    if (e.target.value.length <= 15) {
+                      ChangeHandler(e)
+                    }
+                  }}
                   className='outline-none border border-black rounded-[5px] py-1 w-[18rem] pl-4'
                   required
                 />
@@ -185,7 +187,7 @@ const Signup = () => {
         </div>
         <div className='flex justify-center items-center gap-2 mt-2'>
           <hr className='bg-slate-400 w-[6rem] h-[2px] rounded-full flex justify-center items-center' />
-          <h1>Already have a account?</h1>
+          <h1 className='flex justify-center items-center text-center'>Already have a account?</h1>
           <hr className='bg-slate-400 w-[6rem] h-[2px] rounded-full flex justify-center items-center' />
         </div>
         <div className='mt-2'>

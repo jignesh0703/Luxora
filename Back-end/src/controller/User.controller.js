@@ -3,7 +3,11 @@ import { OTPModel } from '../model/Otp.model.js'
 
 const Registration = async (req, res) => {
     try {
-        const { email, username, password , otp } = req.body
+        let { email, username, password, otp } = req.body
+
+        email = email.trim()
+        username = username.trim()
+        password = password.trim()
 
         if (!email || !username || !password) {
             return res.status(400).json({ message: 'All fields are Required!' })
@@ -25,7 +29,7 @@ const Registration = async (req, res) => {
             return res.status(400).json({ message: 'OTP is expired or not sent' });
         }
 
-        if(String(CheckOTP.OTP) !== String(otp)){
+        if (String(CheckOTP.OTP) !== String(otp)) {
             return res.status(400).json({ message: 'invalid OTP' })
         }
 
@@ -45,13 +49,16 @@ const Registration = async (req, res) => {
 
 const Login = async (req, res) => {
     try {
-        const { EmailOrUsername, password } = req.body
+        let { EmailOrUsername, password } = req.body
 
-        if(!EmailOrUsername){
+        EmailOrUsername = EmailOrUsername.trim()
+        password = password.trim()
+
+        if (!EmailOrUsername) {
             return res.status(400).json({ message: 'email or username is required' })
         }
 
-        if(!password){
+        if (!password) {
             return res.status(400).json({ message: 'password is required' })
         }
 
@@ -59,13 +66,13 @@ const Login = async (req, res) => {
             $or: [{ email: EmailOrUsername }, { username: EmailOrUsername }]
         })
 
-        if(!FindEmailOrUsername){
+        if (!FindEmailOrUsername) {
             return res.status(400).json({ message: 'User not exist' })
         }
 
         const CheckPassword = await FindEmailOrUsername.CheckPassword(password)
 
-        if(!CheckPassword){
+        if (!CheckPassword) {
             return res.status(400).json({ message: 'Invalid password!' })
         }
 
@@ -73,21 +80,37 @@ const Login = async (req, res) => {
         const IsLogin = await UserModel.findById(FindEmailOrUsername._id).select('-password')
 
         const Option = {
-            httpOnly : false,
+            httpOnly: false,
             secure: true,
             sameSite: 'none'
         }
 
-        res.cookie('user-cookies',GetCookies,Option)
-        return res.status(200).json({ message: 'Success' , IsLogin })
+        res.cookie('user-cookies', GetCookies, Option)
+        return res.status(200).json({
+            message: 'User logged in successfully',
+            IsLogin
+        })
 
     } catch (error) {
-        console.log(error)
+        return res.status(500).json({ message: "Somthing wrong try again!" })
+    }
+}
+
+const GetUserData = async (req,res) => {
+    try {
+        const user = req.user
+        return res.status(200).json({
+            message: 'User data fetch successfully',
+            user
+        })
+
+    } catch (error) {
         return res.status(500).json({ message: "Somthing wrong try again!" })
     }
 }
 
 export {
     Registration,
-    Login
+    Login,
+    GetUserData
 }

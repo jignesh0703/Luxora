@@ -1,7 +1,7 @@
 import express from 'express'
 import { AddProduct , DeleteProduct, GetAllProduct, GetIndivisualProduct } from '../controller/Product.controller.js'
 import { upload } from '../middleware/multer.middleware.js'
-import JWTVerify from '../middleware/JWT.middelware.js'
+import JWTVerify from '../middleware/JWT.middelware.seller.js'
 
 const Productrouter = express.Router()
 
