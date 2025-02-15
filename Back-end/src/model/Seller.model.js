@@ -1,9 +1,13 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
 const SellerSchema = new mongoose.Schema(
     {
+        user_id : {
+            type : Schema.Types.ObjectId,
+            ref : 'user'
+        },
         fullname: {
             type: String,
             required: true

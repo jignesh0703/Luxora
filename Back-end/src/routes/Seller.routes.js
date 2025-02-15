@@ -1,9 +1,9 @@
 import express from 'express'
-import { Login, RegistorSeller } from '../controller/Sellet.controller.js'
+import { RegistorSeller } from '../controller/Sellet.controller.js'
+import JWTVerify from '../middleware/JWT.middelware.user.js'
 
 const SellerRoutes = express.Router()
 
-SellerRoutes.post('/registor',RegistorSeller)
-SellerRoutes.post('/login',Login)
+SellerRoutes.post('/registor', JWTVerify, RegistorSeller)
 
 export default SellerRoutes

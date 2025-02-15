@@ -85,12 +85,13 @@ const Signup = () => {
     settime(30)
 
     try {
-      await axios.post(`${apiURL}/api/otp/send-otp`, formdata, {
+      const responce = await axios.post(`${apiURL}/api/otp/send-otp`, formdata, {
         withCredentials: true,
         headers: {
           'Content-Type': 'application/json'
         }
       })
+      console.log(responce)
     } catch (error) {
       if (error.response && error.response.data && error.response.data.message) {
         toast.error(error.response.data.message);
@@ -140,7 +141,7 @@ const Signup = () => {
               <div className='flex flex-col'>
                 <label htmlFor="password" className='font-bold'>Enter Password</label>
                 <input
-                  type="text"
+                  type="password"
                   name='password'
                   value={formdata.password}
                   onChange={ChangeHandler}

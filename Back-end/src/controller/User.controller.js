@@ -1,5 +1,6 @@
 import { UserModel } from "../model/User.Model.js"
 import { OTPModel } from '../model/Otp.model.js'
+import { SellerModel } from "../model/Seller.model.js";
 
 const Registration = async (req, res) => {
     try {
@@ -96,15 +97,23 @@ const Login = async (req, res) => {
     }
 }
 
-const GetUserData = async (req,res) => {
+const GetUserData = async (req, res) => {
     try {
         const user = req.user
+        let Seller = null
+        if (user.isSeller) {
+            Seller = await SellerModel.findOne({ user_id: user._id })
+                .select('-bank_number -gst_number -password')
+        }
+
         return res.status(200).json({
             message: 'User data fetch successfully',
-            user
+            user,
+            Seller
         })
 
     } catch (error) {
+        console.log(error)
         return res.status(500).json({ message: "Somthing wrong try again!" })
     }
 }

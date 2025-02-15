@@ -14,6 +14,10 @@ const UserSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
+    },
+    isSeller : {
+        type : Boolean,
+        default : false
     }
 })
 

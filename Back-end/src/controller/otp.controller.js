@@ -29,7 +29,7 @@ const SendOTPUser = async (req, res) => {
             email: email,
             OTP: otp
         })
-        NEWOTP.save()
+        await NEWOTP.save()
     }
 }
 

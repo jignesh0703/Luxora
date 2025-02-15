@@ -1,0 +1,27 @@
+2. Product Management
+Add New Product (Form to upload product details, images, price, stock, etc.)
+Manage Products (List of all uploaded products with options to edit, delete, or mark as out of stock)
+Bulk Upload (Optional: For adding multiple products at once via CSV)
+3. Order Management
+View Orders (List of all received orders with details like customer name, order status, and payment status)
+Update Order Status (Change status to Processing, Shipped, Delivered, Canceled)
+Track Shipments (Integration with shipping APIs for tracking)
+4. Earnings & Payouts
+Total Earnings
+Pending Payments
+Withdraw Funds (Option to request payout)
+Payment History
+5. Reviews & Ratings
+See customer reviews and ratings on products
+Reply to reviews (if needed)
+6. Seller Profile & Store Settings
+Update Store Name, Logo, Description
+Contact Info & Social Links
+Business Policies (Return, Refund, etc.)
+7. Support & Notifications
+Seller Notifications (New order alerts, low stock alerts, payout updates)
+Help Center / Contact Admin
+Optional Advanced Features
+Discount & Promotions (Create coupon codes, set product discounts)
+Analytics (Detailed reports on sales, customer behavior, etc.)
+Multi-user Access (If a seller has employees managing the store)

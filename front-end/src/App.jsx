@@ -6,6 +6,9 @@ import Login from './Pages/Login'
 import Signup from './Pages/Signup'
 import { ToastContainer } from 'react-toastify'
 import Profile from './Pages/Profile'
+import Order from './Pages/Order'
+import Become_Seller from './Pages/Become_Seller'
+import Seller_Dashboard from './Pages/Seller_Dashboard'
 
 const App = () => {
   return (
@@ -16,6 +19,9 @@ const App = () => {
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<Signup />} />
         <Route path='/profile' element={<Profile />} />
+        <Route path='/order' element={<Order />} />
+        <Route path='/seller' element={<Become_Seller />} />
+        <Route path='/dashboard' element={<Seller_Dashboard />} />
       </Routes>
       <ToastContainer
         position="top-right"

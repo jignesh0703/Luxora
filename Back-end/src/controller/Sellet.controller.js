@@ -1,24 +1,33 @@
 import { SellerModel } from "../model/Seller.model.js";
+import { UserModel } from "../model/User.Model.js";
+import bcrypt from 'bcrypt'
 
 const RegistorSeller = async (req, res) => {
     try {
-        const { fullname, number, email, bank_number, gst_number, password } = req.body;
+        const user = req.user
+        if (!user) {
+            return res.status(400).json({ message: 'Login is Required!' })
+        }
+
+        let { fullname, number, email, bank_number, gst_number, password } = req.body;
+
+        fullname = fullname.trim();
+        number = number.trim();
+        email = email.trim().toLowerCase();
+        bank_number = bank_number.trim();
+        gst_number = gst_number.trim();
+        password = password.trim();
+
         if (!fullname || !number || !email || !bank_number || !gst_number || !password) {
             return res.status(400).json({ message: 'All fields are Required!' })
         }
 
-        const CheckNumber = await SellerModel.findOne({
-            number
-        })
-
+        const CheckNumber = await SellerModel.findOne({ number })
         if (CheckNumber) {
             return res.status(400).json({ message: 'Number is Already Used!' })
         }
 
-        const CheckEmail = await SellerModel.findOne({
-            email
-        })
-
+        const CheckEmail = await SellerModel.findOne({ email })
         if (CheckEmail) {
             return res.status(400).json({ message: 'Email is Already Used!' })
         }
@@ -35,9 +44,19 @@ const RegistorSeller = async (req, res) => {
             return res.status(400).json({ message: 'GST Number must be exactly 15 digits' })
         }
 
-        if (password.lenght > 8) {
+        if (password.length < 8) {
             return res.status(400).json({ message: 'Password must be more than 8 characters' })
         }
+
+        const FindUser = await UserModel.findById(user._id)
+
+        const isPasswordMatch = await bcrypt.compare(password, FindUser.password)
+
+        if (!isPasswordMatch) {
+            return res.status(400).json({ message: 'Incorrect password' });
+        }
+
+        await FindUser.updateOne({ isSeller: true })
 
         const addSeller = new SellerModel({
             fullname,
@@ -45,67 +64,19 @@ const RegistorSeller = async (req, res) => {
             email,
             bank_number,
             gst_number,
-            password
+            password,
+            user_id: user._id
         })
 
         await addSeller.save()
-        return res.status(200).json({ message: 'Registration Succesfully!' })
+        return res.status(200).json({ message: 'Registration Succesfully to Seller Account!' })
 
     } catch (error) {
-        return res.status(500).json({ message: 'Somthing wrong try again!' })
-    }
-}
-
-const Login = async (req, res) => {
-    try {
-        const { EmailAndNumber, password } = req.body
-
-        if(!EmailAndNumber){
-            return res.status(400).json({ message: "email or number is required" })
-        }
-
-        const CheckUser = await SellerModel.findOne({
-            $or: [{ email : EmailAndNumber }, { number : EmailAndNumber }]
-        })
-
-        if (!CheckUser) {
-            return res.status(500).json({ message: "User don't exist" })
-        }
-
-        if(!password){
-            return res.status(400).json({ message: "Password is required" })
-        }
-
-        const isPasswordValid = await CheckUser.CheckPassword(password)
-
-        if(!isPasswordValid){
-            return res.status(400).json({ message: "invalid password" })
-        }
-
-        const JWTToken = await CheckUser.GenerateToken()
-
-        const IsLogin = await SellerModel.findById(CheckUser).select("-password -bank_number -gst_number")
-
-        const Option = {
-            httpOnly : true,
-            secure: true,
-            sameSite: 'none'
-        }
-
-        res.cookie('Token',JWTToken,Option)
-
-        return res.status(200).json({
-            message: "User logged in successfully",
-            IsLogin,
-            JWTToken
-        })
-
-    } catch (error) {
+        console.log(error)
         return res.status(500).json({ message: 'Somthing wrong try again!' })
     }
 }
 
 export {
     RegistorSeller,
-    Login
 }

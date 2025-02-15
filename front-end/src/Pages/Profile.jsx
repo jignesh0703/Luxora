@@ -1,7 +1,18 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { StoreContext } from '../context/Context'
 import { BsBoxSeam } from "react-icons/bs";
 import { FaChevronRight } from "react-icons/fa6";
+import { BsFillPersonFill } from "react-icons/bs";
+import { BsPersonVcardFill } from "react-icons/bs";
+import { LuLogOut } from "react-icons/lu";
+import { Link } from 'react-router-dom'
+
+//import Profile Pages
+import Profile_Info from '../component/ProfilePage/Profile_Info'
+import Manage_Address from '../component/ProfilePage/Manage_Address'
+import Reviews from '../component/ProfilePage/Reviews'
+import WishList from '../component/ProfilePage/WishList'
+import Cart from '../component/ProfilePage/Cart'
 
 const Profile = () => {
 
@@ -28,10 +39,19 @@ const Profile = () => {
         </g>
     </svg>
 
+    const Components = {
+        info: <Profile_Info />,
+        addresh: <Manage_Address />,
+        reviews: <Reviews />,
+        wishlist: <WishList />,
+        cart: <Cart />
+    }
+    const [ActiveComponent, setActiveComponent] = useState('info')
+
     return (
         <>
-            <div className='w-full h-full bg-[#f1f3f6]'>
-                <div className='pt-6 flex justify-center gap-2'>
+            <div className='w-full min-h-screen bg-[#f1f3f6]'>
+                <div className='pt-6 flex justify-center gap-4'>
                     <div className='flex flex-col gap-4'>
                         <div className='w-[18rem] flex bg-white shadow-md p-2 gap-4'>
                             <div>
@@ -39,21 +59,54 @@ const Profile = () => {
                             </div>
                             <div>
                                 <h1>Hello,</h1>
-                                <h1 className='font-bold'>{userdata?.username}</h1>
+                                <h1 className='font-bold'>{userdata?.user?.username}</h1>
                             </div>
                         </div>
-                        <div className='w-[18rem] bg-white shadow-md px-4 py-4'>
-                            <div className='flex gap-4 items-center'>
+                        <div className='w-[18rem] bg-white shadow-md'>
+                            <div className='flex gap-4 items-center border-b border-gray-300 px-4 py-4'>
                                 <BsBoxSeam className='text-[1.8rem]' />
+                                <Link to='/order' className='flex w-full'>
+                                    <div className='w-full flex items-center justify-between group cursor-pointer transition duration-300'>
+                                        <h1 className='font-bold text-gray-500 group-hover:text-[#131921]'>MY ORDERS</h1>
+                                        <FaChevronRight className='flex justify-end float-right' />
+                                    </div>
+                                </Link>
+                            </div>
+                            <div className='flex border-b border-gray-300 px-4 py-4 flex-col'>
+                                <div className='flex gap-4 items-center'>
+                                    <BsFillPersonFill className='text-[1.8rem]' />
+                                    <a className='w-full flex items-center justify-between transition duration-300'>
+                                        <h1 className='font-bold text-gray-500'>ACCOUNT SETTINGS</h1>
+                                    </a>
+                                </div>
+                                <div className='mt-2'>
+                                    <h1 className={`pl-10 py-2 duration-200 cursor-pointer ${ActiveComponent === 'info' ? 'font-bold bg-gray-100' : ''} `} onClick={() => setActiveComponent('info')}>Profile Information</h1>
+                                    <h1 className={`pl-10 py-2 duration-200 cursor-pointer ${ActiveComponent === 'addresh' ? 'font-bold bg-gray-100' : '' } `} onClick={() => setActiveComponent('addresh')}>Manage Addresh</h1>
+                                </div>
+                            </div>
+                            <div className='flex border-b border-gray-300 px-4 py-4 flex-col'>
+                                <div className='flex gap-4 items-center'>
+                                    <BsPersonVcardFill className='text-[1.8rem]' />
+                                    <a className='w-full flex items-center justify-between transition duration-300'>
+                                        <h1 className='font-bold text-gray-500'>MY STUFF</h1>
+                                    </a>
+                                </div>
+                                <div className='mt-2'>
+                                    <h1 className={`pl-10 py-2 duration-200 cursor-pointer ${ActiveComponent === 'reviews' ? 'font-bold bg-gray-100' : '' } `} onClick={() => setActiveComponent('reviews')}>My Reviews & Ratings</h1>
+                                    <h1 className={`pl-10 py-2 duration-200 cursor-pointer ${ActiveComponent === 'wishlist' ? 'font-bold bg-gray-100' : '' } `} onClick={() => setActiveComponent('wishlist')}>My Wishlist</h1>
+                                    <h1 className={`pl-10 py-2 duration-200 cursor-pointer ${ActiveComponent === 'cart' ? 'font-bold bg-gray-100' : '' } `} onClick={() => setActiveComponent('cart')}>My Cart</h1>
+                                </div>
+                            </div>
+                            <div className='flex gap-4 items-center border-b border-gray-300 px-4 py-4'>
+                                <LuLogOut className='text-[1.8rem]' />
                                 <a className='w-full flex items-center justify-between group cursor-pointer transition duration-300'>
-                                    <h1 className='font-bold text-gray-500 group-hover:text-[#131921]'>MY ORDERS</h1>
-                                    <FaChevronRight className='flex justify-end float-right' />
+                                    <h1 className='font-bold text-gray-500 group-hover:text-[#131921]'>Logout</h1>
                                 </a>
                             </div>
                         </div>
                     </div>
-                    <div className='w-[50rem]'>
-                        kjj
+                    <div className='w-[50rem] bg-white shadow-md'>
+                        {Components[ActiveComponent]}
                     </div>
                 </div>
             </div>

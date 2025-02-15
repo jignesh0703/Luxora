@@ -1,5 +1,6 @@
 import { createContext, useCallback, useEffect, useState } from "react";
 import axios from 'axios'
+import { toast } from 'react-toastify'
 
 export const StoreContext = createContext(null)
 
@@ -14,7 +15,7 @@ const ContextProvider = ({ children }) => {
             const response = await axios.get(`${apiURL}/api/user/getdata`,{
                 withCredentials : true
             })
-            setuserdata(response.data.user)
+            setuserdata(response.data)
         } catch (error) {
             if (error.response && error.response.data && error.response.data.message) {
                 toast.error(error.response.data.message);

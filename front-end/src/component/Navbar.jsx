@@ -5,14 +5,16 @@ import { IoCartOutline } from "react-icons/io5";
 import { MdOutlineStorefront } from "react-icons/md";
 import { HiDotsVertical } from "react-icons/hi";
 import { CiSearch } from "react-icons/ci";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { StoreContext } from '../context/Context';
+import { toast } from 'react-toastify';
 
 const Navbar = () => {
 
   const [sawmodechange, setsawmodechange] = useState(false)
   const modechange = useRef(null)
   const { userdata } = useContext(StoreContext)
+  const Navigate = useNavigate()
 
   useEffect(() => {
     const HandleClickOutSide = (event) => {
@@ -38,10 +40,10 @@ const Navbar = () => {
       </div>
       <div className='flex gap-2 sm:gap-2 lg:gap-4'>
         {
-          userdata
+          userdata?.user
             ? <Link to='/profile'><button className='flex justify-center items-center text-white gap-2 hover:border border-white px-2 rounded-[10px] font-semibold group text-[1.1rem] py-1'>
               <CgProfile className='text-[1.5rem]' />
-              <h1 className='hidden sm:flex'>{userdata.username}</h1>
+              <h1 className='hidden sm:flex'>{userdata?.user.username}</h1>
               <FaChevronDown className='group-hover:rotate-180 transition duration-500 text-base hidden sm:flex' />
             </button></Link>
             : <Link to='/login'><button className='flex justify-center items-center text-white gap-2 hover:border border-white px-2 rounded-[10px] font-semibold group text-[1.1rem] py-1'>
@@ -55,10 +57,27 @@ const Navbar = () => {
           <IoCartOutline className='text-[1.5rem]' />
           <h1 className='hidden xl:flex'>Cart</h1>
         </button>
-        <button className='justify-center items-center text-white hover:border border-white px-2 rounded-[10px] font-semibold gap-2 text-[1.1rem] py-1 hidden lg:flex'>
-          <MdOutlineStorefront className='text-[1.5rem]' />
-          <h1 className='hidden xl:flex'>Become a Seller</h1>
-        </button>
+        {
+          userdata?.user?.isSeller
+            ? <button className='justify-center items-center text-white hover:border border-white px-2 rounded-[10px] font-semibold gap-2 text-[1.1rem] py-1 hidden lg:flex'
+              onClick={() => { Navigate('/dashboard') }}
+            >
+              <MdOutlineStorefront className='text-[1.5rem]' />
+              <h1 className='hidden xl:flex'>Seller Dashboard</h1>
+            </button>
+            : <button className='justify-center items-center text-white hover:border border-white px-2 rounded-[10px] font-semibold gap-2 text-[1.1rem] py-1 hidden lg:flex'
+              onClick={() => {
+                if (userdata?.user) {
+                  Navigate('/seller')
+                } else {
+                  toast.error('Login Required!')
+                }
+              }}
+            >
+              <MdOutlineStorefront className='text-[1.5rem]' />
+              <h1 className='hidden xl:flex'>Become a Seller</h1>
+            </button>
+        }
         <div className='text-white text-[1.2rem] hover:border border-white px-1 rounded-[10px] flex justify-center items-center cursor-pointer' onClick={() => setsawmodechange(!sawmodechange)}>
           <HiDotsVertical />
           {
