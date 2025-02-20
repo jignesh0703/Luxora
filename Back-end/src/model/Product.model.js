@@ -17,10 +17,6 @@ const ProductSchema = new mongoose.Schema(
         offer_price: {
             type: Number
         },
-        category: {
-            type: String,
-            required: true
-        },
         stock: {
             type: Number,
             required: true

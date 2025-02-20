@@ -9,6 +9,8 @@ import Profile from './Pages/Profile'
 import Order from './Pages/Order'
 import Become_Seller from './Pages/Become_Seller'
 import Seller_Dashboard from './Pages/Seller_Dashboard'
+import Product from './Pages/Product'
+import Cart from './Pages/Cart'
 
 const App = () => {
   return (
@@ -22,6 +24,8 @@ const App = () => {
         <Route path='/order' element={<Order />} />
         <Route path='/seller' element={<Become_Seller />} />
         <Route path='/dashboard' element={<Seller_Dashboard />} />
+        <Route path='/product/:id' element={<Product />} />
+        <Route path='/cart' element={<Cart />} />
       </Routes>
       <ToastContainer
         position="top-right"

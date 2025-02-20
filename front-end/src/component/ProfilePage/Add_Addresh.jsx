@@ -1,8 +1,13 @@
 import axios from 'axios'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
+import { StoreContext } from '../../context/Context'
+import { toast } from 'react-toastify'
+import { Oval } from "react-loader-spinner";
 
 const Add_Addresh = ({ setsawAdd_Addresh }) => {
 
+    const [isLoading, setisLoading] = useState(false)
+    const { apiURL } = useContext(StoreContext)
     const [focusedFields, setfocusedFields] = useState({})
     const HandleFocus = (feild) => {
         setfocusedFields((prev) => ({
@@ -35,7 +40,7 @@ const Add_Addresh = ({ setsawAdd_Addresh }) => {
         address: '',
         city: '',
         state: '',
-        type: ''
+        address_type: ''
     })
 
     const ChangeHandler = (e) => {
@@ -46,33 +51,68 @@ const Add_Addresh = ({ setsawAdd_Addresh }) => {
     }
 
     const SubmitHandler = async (e) => {
+        setisLoading(true)
         e.preventDefault()
-        console.log(formdata)
+        try {
+            const response = await axios.post(`${apiURL}/api/address/add`, formdata, {
+                withCredentials: true,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            toast.success(response.data.message)
+            setsawAdd_Addresh(false)
+            setformdata({
+                name: '',
+                number: '',
+                pincode: '',
+                address: '',
+                city: '',
+                state: '',
+                address_type: ''
+            })
+        } catch (error) {
+            if (error.response && error.response.data && error.response.data.message) {
+                toast.error(error.response.data.message);
+            }
+        }
+        setisLoading(false)
     }
 
     const FindLocationviaPincode = async (e) => {
         if (e.target.value.length <= 6) {
-            ChangeHandler(e)
+            ChangeHandler(e);
             if (e.target.value.length === 6) {
                 const url = `https://nominatim.openstreetmap.org/search?postalcode=${e.target.value}&countrycodes=IN&format=json`;
-                if (response.data.length > 0) {
-                    const location = response.data[0].display_name
-                    console.log(location)
-                    const parts = location.split(', ').slice(1)
-                    const len = parts.length
-                    const city = len >= 3 ? parts[len - 3] : 'Unknown'
-                    const state = len >= 3 ? parts[len - 2] : 'Unknown'
-                    setformdata({
-                        city,
-                        state
-                    })
+                try {
+                    const response = await fetch(url);
+                    const data = await response.json();
+                    if (data.length > 0) {
+                        const location = data[0].display_name;
+                        const parts = location.split(', ').slice(1);
+                        const len = parts.length;
+                        const city = len >= 3 ? parts[len - 3] : 'Unknown';
+                        const state = len >= 3 ? parts[len - 2] : 'Unknown';
+                        setformdata((prev) => ({
+                            ...prev,
+                            city,
+                            state
+                        }));
+                    }
+                } catch (error) {
+                    console.error("Error fetching location:", error);
                 }
             }
         }
-    }
+    };
 
     return (
         <>
+            {
+                isLoading && <div className="flex justify-center items-center fixed inset-0 bg-gray-500 bg-opacity-50 z-50">
+                    <Oval type="Oval" color="#00BFFF" height={50} width={50} />
+                </div>
+            }
             <div className='border border-slate-300 mt-8 p-6  text-[#2874f0] font-bold bg-[#f5faff]'>
                 <div>
                     Add A NEW ADDRESS
@@ -181,10 +221,10 @@ const Add_Addresh = ({ setsawAdd_Addresh }) => {
                             <label htmlFor='home' className='flex gap-2 items-center'>
                                 <input
                                     type="radio"
-                                    name="type"
+                                    name="address_type"
                                     value='home'
                                     onChange={ChangeHandler}
-                                    checked={formdata.type === 'home'}
+                                    checked={formdata.address_type === 'home'}
                                     className={`w-[1.1rem] h-[1.1rem] cursor-pointer rounded-full border border-gray-400 checked:bg-[#131921]`}
                                 />
                                 <h1>Home</h1>
@@ -192,10 +232,10 @@ const Add_Addresh = ({ setsawAdd_Addresh }) => {
                             <label htmlFor='work' className='flex gap-2 items-center'>
                                 <input
                                     type="radio"
-                                    name="type"
+                                    name="address_type"
                                     value='work'
                                     onChange={ChangeHandler}
-                                    checked={formdata.type === 'work'}
+                                    checked={formdata.address_type === 'work'}
                                     className={`w-[1.1rem] h-[1.1rem] cursor-pointer rounded-full border border-gray-400 checked:bg-[#131921]`}
                                 />
                                 <h1>Work</h1>

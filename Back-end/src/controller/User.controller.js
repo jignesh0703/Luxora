@@ -113,7 +113,21 @@ const GetUserData = async (req, res) => {
         })
 
     } catch (error) {
-        console.log(error)
+        return res.status(500).json({ message: "Somthing wrong try again!" })
+    }
+}
+
+const logout = async (req, res) => {
+    try {
+        res.clearCookie("user-cookies", {
+            httpOnly: true,
+            secure: true,
+            sameSite: "None",
+        });
+
+        return res.status(200).json({ message: "Logout Successfully" })
+
+    } catch (error) {
         return res.status(500).json({ message: "Somthing wrong try again!" })
     }
 }
@@ -121,5 +135,6 @@ const GetUserData = async (req, res) => {
 export {
     Registration,
     Login,
-    GetUserData
+    GetUserData,
+    logout
 }

@@ -12,21 +12,18 @@ const ContextProvider = ({ children }) => {
 
     const FetchUserData = useCallback(async () => {
         try {
-            const response = await axios.get(`${apiURL}/api/user/getdata`,{
-                withCredentials : true
+            const response = await axios.get(`${apiURL}/api/user/getdata`, {
+                withCredentials: true
             })
             setuserdata(response.data)
         } catch (error) {
-            if (error.response && error.response.data && error.response.data.message) {
-                toast.error(error.response.data.message);
-            }
+            setuserdata(null)
         }
     }, [])
 
     useEffect(() => {
-      FetchUserData()
+        FetchUserData()
     }, [trackuserdata])
-    
 
     const StoreData = {
         apiURL,

@@ -52,8 +52,15 @@ const Navbar = () => {
               <FaChevronDown className='group-hover:rotate-180 transition duration-500 text-base hidden sm:flex' />
             </button></Link>
         }
-
-        <button className='hidden md:flex justify-center items-center text-white hover:border border-white px-2 rounded-[10px] font-semibold gap-2 text-[1.1rem] py-1'>
+        <button className='hidden md:flex justify-center items-center text-white hover:border border-white px-2 rounded-[10px] font-semibold gap-2 text-[1.1rem] py-1'
+          onClick={() => {
+            if (userdata?.user) {
+              Navigate('/cart')
+            } else {
+              toast.error('Login Required!')
+            }
+          }}
+        >
           <IoCartOutline className='text-[1.5rem]' />
           <h1 className='hidden xl:flex'>Cart</h1>
         </button>
@@ -90,7 +97,15 @@ const Navbar = () => {
                 <h1 className='flex text-[1.1rem]'>Become a Seller</h1>
               </button>
               <hr className='bg-black w-[90%] h-[2px] rounded-full flex justify-center items-center ml-[5%] xl:hidden' />
-              <button className='flex justify-center items-center text-black px-2 font-semibold gap-2 text-[1.1rem] py-1 xl:hidden hover:bg-slate-200 rounded-[5px]'>
+              <button className='flex justify-center items-center text-black px-2 font-semibold gap-2 text-[1.1rem] py-1 xl:hidden hover:bg-slate-200 rounded-[5px]'
+                onClick={() => {
+                  if (userdata?.user) {
+                    Navigate('/cart')
+                  } else {
+                    toast.error('Login Required!')
+                  }
+                }}
+              >
                 <IoCartOutline className='text-[1.5rem]' />
                 <h1 className='flex'>Cart</h1>
               </button>

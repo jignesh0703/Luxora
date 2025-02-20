@@ -1,27 +1,31 @@
 import { ProductModel } from "../model/Product.model.js";
 import UploadOnCloudinary from "../utils/Cloudinary.js";
 import { v2 as cloudinary } from 'cloudinary';
+import { UserModel } from "../model/User.Model.js"
 
 const AddProduct = async (req, res) => {
     try {
-        const { name, description, price, offer_price, category, stock } = req.body
-        if (!name || !description || !price || !category || !stock) {
-            return res.status(400).json({ message: "All Feilds are Required!" })
+        const seller_id = req.user?._id;
+
+        const FindUserHaveSellerAccount = await UserModel.findById(seller_id)
+        if (!FindUserHaveSellerAccount.isSeller) {
+            return res.status(400).json({ message: "Dont have seller account!" });
         }
 
-        const images = req.files.image || []
-        const video = req.files.video || []
+        const { name, description, price, offer_price, stock } = req.body;
 
-        if (images.length === 0) {
-            return res.status(400).json({ message: "Images are Required!" })
+        if (!name || !description || !price || !stock) {
+            return res.status(400).json({ message: "All fields are required!" });
         }
+
+        if (!req.files || !req.files.images || req.files.images.length === 0) {
+            return res.status(400).json({ message: "Images are required!" });
+        }
+
+        const images = req.files.images;
 
         if (images.length < 4 || images.length > 7) {
-            return res.status(400).json({ message: "Images must be between 4 to 7" })
-        }
-
-        if (video.length > 1) {
-            return res.status(400).json({ message: "Video must be only 1" })
+            return res.status(400).json({ message: "Images must be between 4 and 7." });
         }
 
         const uploadedImages = await Promise.all(
@@ -31,40 +35,31 @@ const AddProduct = async (req, res) => {
             )
         );
 
-        if (video.length === 1) {
-            const UploadVideo = await UploadOnCloudinary(video[0].buffer, `product_video/${Date.now()}`, 'video')
-            if (UploadVideo && UploadVideo.secure_url) {
-                uploadedImages.push(UploadVideo.secure_url)
-            }
+        if (!seller_id) {
+            return res.status(400).json({ message: "User is not logged in!" });
         }
 
-        const user_id = req.seller?._id
-        if (!user_id) {
-            return res.status(400).json({ message: "User is not logined!" })
-        }
-
-        const addproduct = new ProductModel({
+        const addProduct = new ProductModel({
             name,
             description,
             price,
             offer_price,
-            category,
             stock,
-            seller_id: user_id,
+            seller_id,
             images: uploadedImages
-        })
+        });
 
-        await addproduct.save()
-        return res.status(200).json({ addproduct, message: 'Product added Succesfully!' })
+        await addProduct.save();
+        return res.status(200).json({ addProduct, message: "Product added successfully!" });
 
     } catch (error) {
-        return res.status(500).json({ message: "Somthing wrong try again!" })
+        return res.status(500).json({ message: "Something went wrong, try again!" });
     }
-}
+};
 
 const DeleteProduct = async (req, res) => {
     try {
-        const user_id = req.seller._id
+        const user_id = req.user._id
 
         let { product_id } = req.params
         product_id = product_id.replace(/^:/, '')
@@ -101,6 +96,41 @@ const DeleteProduct = async (req, res) => {
     }
 }
 
+const UpdateProduct = async (req, res) => {
+    try {
+        const user_id = req.user._id
+
+        let { product_id } = req.params
+        product_id = product_id.replace(/^:/, '')
+
+        const FindProduct = await ProductModel.findById(product_id)
+
+        if (!FindProduct) {
+            return res.status(400).json({ message: "Product don't found" })
+        }
+
+        if (FindProduct.seller_id.toString() !== user_id.toString()) {
+            return res.status(400).json({ message: "You are not allowed to delete product" })
+        }
+
+        const UpdateData = {}
+        const { name, description, price, offer_price, stock } = req.body
+
+        if (name) UpdateData.name = name;
+        if (description) UpdateData.description = description;
+        if (price) UpdateData.price = price;
+        if (offer_price) UpdateData.offer_price = offer_price;
+        if (stock) UpdateData.stock = stock;
+
+        await ProductModel.findByIdAndUpdate(product_id, UpdateData, { new: true })
+
+        return res.status(200).json({ message: 'Product Updated Succesfully!' })
+
+    } catch (error) {
+        return res.status(500).json({ message: "Somthing wrong try again!" })
+    }
+}
+
 const GetAllProduct = async (req, res) => {
     try {
 
@@ -125,7 +155,32 @@ const GetAllProduct = async (req, res) => {
             })
 
     } catch (error) {
-        return res.status(500).json({ message: "Something went wrong while fetching videos." })
+        return res.status(500).json({ message: "Something went wrong while fetching products." })
+    }
+}
+
+const GetSellerAllProduct = async (req, res) => {
+    try {
+        const user = req.user
+        if (!user.isSeller) {
+            return res.status(400).json({ message: "don't found Seller account" })
+        }
+
+        const FindProducts = await ProductModel.find({
+            seller_id: user._id
+        })
+            .select('-images')
+            .sort({ _id: -1 });
+
+        return res
+            .status(200)
+            .json({
+                message: 'data fetched Product',
+                ProductCount: FindProducts.length,
+                FindProducts
+            })
+    } catch (error) {
+        return res.status(500).json({ message: "Something went wrong while fetching products." })
     }
 }
 
@@ -150,6 +205,8 @@ const GetIndivisualProduct = async (req, res) => {
 export {
     AddProduct,
     DeleteProduct,
+    UpdateProduct,
     GetAllProduct,
+    GetSellerAllProduct,
     GetIndivisualProduct
 }

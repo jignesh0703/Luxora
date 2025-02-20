@@ -1,17 +1,18 @@
 import React from 'react'
-import product1 from '../images/product1_img1.png'
+import { Link } from 'react-router-dom'
 
-const Product = () => {
+const Product = ({ id, name, images }) => {
     return (
-        <div className=''>
-            <div>
-                <img src={product1} alt="products" className='w-[12rem] h-[15rem] object-cover' />
+        <Link to={`/product/${id}`}>
+            <div className=''>
+                <div>
+                    <img src={images[0]} alt="products" className='w-[12rem] h-[15rem] object-cover' />
+                </div>
+                <div className='w-[12rem]'>
+                    <h1 className='w-[12] truncate whitespace-nowrap overflow-hidden'>{name}</h1>
+                </div>
             </div>
-            <div className='w-[12rem]'>
-                <h1>Men Regular Fit Solid Spread Collar Casual Shirt</h1>
-            </div>
-        </div>
-
+        </Link>
     )
 }
 

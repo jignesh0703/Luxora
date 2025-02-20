@@ -5,18 +5,19 @@ import { FaChevronRight } from "react-icons/fa6";
 import { BsFillPersonFill } from "react-icons/bs";
 import { BsPersonVcardFill } from "react-icons/bs";
 import { LuLogOut } from "react-icons/lu";
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 //import Profile Pages
 import Profile_Info from '../component/ProfilePage/Profile_Info'
 import Manage_Address from '../component/ProfilePage/Manage_Address'
 import Reviews from '../component/ProfilePage/Reviews'
 import WishList from '../component/ProfilePage/WishList'
-import Cart from '../component/ProfilePage/Cart'
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const Profile = () => {
 
-    const { userdata } = useContext(StoreContext)
+    const { userdata, apiURL ,settrackuserdata, trackuserdata } = useContext(StoreContext)
     const Profileicon = <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width={50} height={50} viewBox="0 0 50 50" >
         <defs>
             <path id="a" d="M50 0v50H0V0z" />
@@ -39,14 +40,30 @@ const Profile = () => {
         </g>
     </svg>
 
+    const navigate = useNavigate()
+
     const Components = {
         info: <Profile_Info />,
         addresh: <Manage_Address />,
         reviews: <Reviews />,
-        wishlist: <WishList />,
-        cart: <Cart />
+        wishlist: <WishList />
     }
     const [ActiveComponent, setActiveComponent] = useState('info')
+
+    const Logout = async () => {
+        try {
+            const response = await axios.post(`${apiURL}/api/user/logout`, {}, {
+                withCredentials: true
+            })
+            navigate('/')
+            settrackuserdata(!trackuserdata)
+            toast.success(response.data.message)
+        } catch (error) {
+            if (error.response && error.response.data && error.response.data.message) {
+                toast.error(error.response.data.message);
+            }
+        }
+    }
 
     return (
         <>
@@ -81,7 +98,7 @@ const Profile = () => {
                                 </div>
                                 <div className='mt-2'>
                                     <h1 className={`pl-10 py-2 duration-200 cursor-pointer ${ActiveComponent === 'info' ? 'font-bold bg-gray-100' : ''} `} onClick={() => setActiveComponent('info')}>Profile Information</h1>
-                                    <h1 className={`pl-10 py-2 duration-200 cursor-pointer ${ActiveComponent === 'addresh' ? 'font-bold bg-gray-100' : '' } `} onClick={() => setActiveComponent('addresh')}>Manage Addresh</h1>
+                                    <h1 className={`pl-10 py-2 duration-200 cursor-pointer ${ActiveComponent === 'addresh' ? 'font-bold bg-gray-100' : ''} `} onClick={() => setActiveComponent('addresh')}>Manage Addresh</h1>
                                 </div>
                             </div>
                             <div className='flex border-b border-gray-300 px-4 py-4 flex-col'>
@@ -92,12 +109,12 @@ const Profile = () => {
                                     </a>
                                 </div>
                                 <div className='mt-2'>
-                                    <h1 className={`pl-10 py-2 duration-200 cursor-pointer ${ActiveComponent === 'reviews' ? 'font-bold bg-gray-100' : '' } `} onClick={() => setActiveComponent('reviews')}>My Reviews & Ratings</h1>
-                                    <h1 className={`pl-10 py-2 duration-200 cursor-pointer ${ActiveComponent === 'wishlist' ? 'font-bold bg-gray-100' : '' } `} onClick={() => setActiveComponent('wishlist')}>My Wishlist</h1>
-                                    <h1 className={`pl-10 py-2 duration-200 cursor-pointer ${ActiveComponent === 'cart' ? 'font-bold bg-gray-100' : '' } `} onClick={() => setActiveComponent('cart')}>My Cart</h1>
+                                    <h1 className={`pl-10 py-2 duration-200 cursor-pointer ${ActiveComponent === 'reviews' ? 'font-bold bg-gray-100' : ''} `} onClick={() => setActiveComponent('reviews')}>My Reviews & Ratings</h1>
+                                    <h1 className={`pl-10 py-2 duration-200 cursor-pointer ${ActiveComponent === 'wishlist' ? 'font-bold bg-gray-100' : ''} `} onClick={() => setActiveComponent('wishlist')}>My Wishlist</h1>
+                                    <h1 className={`pl-10 py-2 duration-200 cursor-pointer ${ActiveComponent === 'cart' ? 'font-bold bg-gray-100' : ''} `} onClick={() => navigate('/cart')}>My Cart</h1>
                                 </div>
                             </div>
-                            <div className='flex gap-4 items-center border-b border-gray-300 px-4 py-4'>
+                            <div className='flex gap-4 items-center border-b border-gray-300 px-4 py-4' onClick={() => Logout()}>
                                 <LuLogOut className='text-[1.8rem]' />
                                 <a className='w-full flex items-center justify-between group cursor-pointer transition duration-300'>
                                     <h1 className='font-bold text-gray-500 group-hover:text-[#131921]'>Logout</h1>

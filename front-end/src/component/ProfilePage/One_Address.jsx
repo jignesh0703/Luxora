@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { HiOutlineDotsVertical } from "react-icons/hi";
 
-const One_Address = () => {
+const One_Address = ({ id, name, number, address, pincode, city, state, address_type }) => {
 
     const [showMenu, setshowMenu] = useState(false)
     const dropref = useRef(null)
@@ -21,18 +21,17 @@ const One_Address = () => {
         <div className='border border-slate-300 mt-8 p-6 flex justify-between'>
             <div className=''>
                 <div>
-                    <h1 className='bg-slate-300 w-max px-2 rounded-[5px] font-medium text-gray-500'>Home</h1>
+                    <h1 className='bg-slate-300 w-max px-2 rounded-[5px] font-medium text-gray-500'>{address_type}</h1>
                 </div>
                 <div className='flex gap-6 mt-2 font-semibold'>
-                    <h1>Jignesh Koli</h1>
-                    <h1>9265015330</h1>
+                    <h1>{name}</h1>
+                    <h1>{number}</h1>
                 </div>
                 <div className='flex mt-2 gap-1'>
-                    <h1>258, Laxmi Park So.,</h1>
-                    <h1>Laskana,</h1>
-                    <h1>Surat,</h1>
-                    <h1>Gujrat</h1>
-                    <h1 className='font-semibold'>-395008</h1>
+                    <h1>{address},</h1>
+                    <h1>{city},</h1>
+                    <h1>{state}</h1>
+                    <h1 className='font-semibold'>-{pincode}</h1>
                 </div>
             </div>
             <div className='relative'>

@@ -1,7 +1,3 @@
-2. Product Management
-Add New Product (Form to upload product details, images, price, stock, etc.)
-Manage Products (List of all uploaded products with options to edit, delete, or mark as out of stock)
-Bulk Upload (Optional: For adding multiple products at once via CSV)
 3. Order Management
 View Orders (List of all received orders with details like customer name, order status, and payment status)
 Update Order Status (Change status to Processing, Shipped, Delivered, Canceled)
