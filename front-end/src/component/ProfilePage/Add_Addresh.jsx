@@ -4,7 +4,7 @@ import { StoreContext } from '../../context/Context'
 import { toast } from 'react-toastify'
 import { Oval } from "react-loader-spinner";
 
-const Add_Addresh = ({ setsawAdd_Addresh }) => {
+const Add_Addresh = ({ setsawAdd_Addresh,settrakcaddresh,trakcaddresh }) => {
 
     const [isLoading, setisLoading] = useState(false)
     const { apiURL } = useContext(StoreContext)
@@ -62,6 +62,7 @@ const Add_Addresh = ({ setsawAdd_Addresh }) => {
             })
             toast.success(response.data.message)
             setsawAdd_Addresh(false)
+            settrakcaddresh(!trakcaddresh)
             setformdata({
                 name: '',
                 number: '',

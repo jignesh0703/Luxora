@@ -85,13 +85,12 @@ const Signup = () => {
     settime(30)
 
     try {
-      const responce = await axios.post(`${apiURL}/api/otp/send-otp`, formdata, {
+      await axios.post(`${apiURL}/api/otp/send-otp`, formdata, {
         withCredentials: true,
         headers: {
           'Content-Type': 'application/json'
         }
       })
-      console.log(responce)
     } catch (error) {
       if (error.response && error.response.data && error.response.data.message) {
         toast.error(error.response.data.message);

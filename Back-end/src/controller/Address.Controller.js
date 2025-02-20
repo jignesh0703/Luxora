@@ -48,9 +48,9 @@ const FetchAddress = async (req, res) => {
     try {
         const user = req.user._id
 
-        const FindUser = await AddreshModel.findOne({user_id : user})
+        const FindUser = await AddreshModel.findOne({ user_id: user })
 
-        if(!FindUser){
+        if (!FindUser) {
             return res.status(400).json({ message: "User Don't Exist!" })
         }
 
@@ -61,7 +61,33 @@ const FetchAddress = async (req, res) => {
     }
 }
 
+const RemoveAddress = async (req, res) => {
+    try {
+        const user = req.user._id
+        const addressid = req.params.address_id
+
+        const FindUser = await AddreshModel.findOne({ user_id: user })
+        if (!FindUser) {
+            return res.status(400).json({ message: "User Don't Exist!" })
+        }
+
+        const FindAddress = FindUser.address.findIndex(p => p._id.toString() === addressid)
+        if(FindAddress === -1){
+            return res.status(400).json({ message: "Addresh Don't Exist!" })
+        } 
+
+        FindUser.address.splice(FetchAddress,1)
+        await FindUser.save()
+
+        return res.status(200).json({ message: "Address removed successfully!" , FindUser })
+
+    } catch (error) {
+        return res.status(500).json({ message: "Somthing wrong try again!" })
+    }
+}
+
 export {
     AddAdress,
-    FetchAddress
+    FetchAddress,
+    RemoveAddress
 }

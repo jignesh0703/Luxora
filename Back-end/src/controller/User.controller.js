@@ -132,9 +132,89 @@ const logout = async (req, res) => {
     }
 }
 
+const UpdateUsername = async (req, res) => {
+    try {
+        const userid = req.user._id
+        const { username, gender } = req.body
+
+        const user = await UserModel.findOne({ _id: userid })
+        if (!user) {
+            return res.status(400).json({ message: "User don't Exist" })
+        }
+
+        if (username) {
+            user.username = username
+        }
+        if (gender) {
+            user.gender = gender
+        }
+
+        await user.save()
+        return res.status(200).json({ message: "User updated successfully" });
+
+    } catch (error) {
+        return res.status(500).json({ message: "Somthing wrong try again!" })
+    }
+}
+
+const UpdateNumber = async (req, res) => {
+    try {
+        const userid = req.user._id
+        const { number } = req.body
+        const user = await UserModel.findOne({ _id: userid })
+        if (!user) {
+            return res.status(400).json({ message: "User don't Exist" })
+        }
+
+        if (!number || number.length !== 10) {
+            return res.status(400).json({ message: "Mobile number should be 10 digits" });
+        }
+
+        user.number = number
+        await user.save()
+        return res.status(200).json({ message: "User updated successfully", user });
+
+    } catch (error) {
+        return res.status(500).json({ message: "Somthing wrong try again!" })
+    }
+}
+
+const UpdateEmail = async (req, res) => {
+    try {
+        const user = req.user._id
+        const { email , otp } = req.body
+        console.log(req.body)
+        
+        const CheckOTP = await OTPModel.findOne({
+            email
+        })
+
+        if (!CheckOTP || !CheckOTP.OTP) {
+            return res.status(400).json({ message: 'OTP is expired or not sent' });
+        }
+
+        if (String(CheckOTP.OTP) !== String(otp)) {
+            return res.status(400).json({ message: 'invalid OTP' })
+        }
+
+        const Finduser = await UserModel.findById(user)
+
+        Finduser.email = email
+        Finduser.save()
+
+        return res.status(200).json({ message: 'Email Updated Succesfully' })
+
+    } catch (error) {
+        return res.status(500).json({ message: "Somthing wrong try again!" })
+    }
+}
+
 export {
     Registration,
     Login,
     GetUserData,
-    logout
+    logout,
+    UpdateUsername,
+    UpdateNumber,
+    UpdateEmail
 }

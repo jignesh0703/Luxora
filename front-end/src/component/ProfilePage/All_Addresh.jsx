@@ -10,16 +10,15 @@ const All_Addresh = () => {
     const { apiURL } = useContext(StoreContext)
     const [sawAdd_Addresh, setsawAdd_Addresh] = useState(false)
     const [Addressdata, setAddressdata] = useState(null)
+    const [trakcaddresh, settrakcaddresh] = useState(false)
 
     const FetchAddress = async () => {
         try {
             const response = await axios.get(`${apiURL}/api/address/fetch`, {
                 withCredentials: true
             })
-            console.log(response.data.FindUser.address)
             setAddressdata(response.data.FindUser.address)
         } catch (error) {
-            console.log(error)
             if (error.response && error.response.data && error.response.data.message) {
                 toast.error(error.response.data.message);
             }
@@ -28,7 +27,7 @@ const All_Addresh = () => {
 
     useEffect(() => {
         FetchAddress()
-    }, [])
+    }, [trakcaddresh])
 
 
     return (
@@ -37,11 +36,11 @@ const All_Addresh = () => {
                 <FaPlus /> Add A NEW ADDRESS
             </div>
             {
-                sawAdd_Addresh && <Add_Addresh setsawAdd_Addresh={setsawAdd_Addresh} />
+                sawAdd_Addresh && <Add_Addresh setsawAdd_Addresh={setsawAdd_Addresh} settrakcaddresh={settrakcaddresh} trakcaddresh={trakcaddresh}/>
             }
             {
                 Addressdata && Addressdata.map((item, index) => {
-                    return <One_Address id={item._id} name={item.name} number={item.number} pincode={item.pincode} city={item.city} state={item.state} address={item.address} address_type={item.address_type} key={index} />
+                    return <One_Address id={item._id} name={item.name} number={item.number} pincode={item.pincode} city={item.city} state={item.state} address={item.address} address_type={item.address_type} key={index} settrakcaddresh={settrakcaddresh} trakcaddresh={trakcaddresh} />
                 })
             }
         </>

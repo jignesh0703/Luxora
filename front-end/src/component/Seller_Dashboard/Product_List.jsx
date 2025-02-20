@@ -33,6 +33,7 @@ const Product_List = ({ item, settrackproducts, trackproducts }) => {
             setsawdropref(false)
             toast.success(responce.data.message)
         } catch (error) {
+            console.log(error)
             if (error.response && error.response.data && error.response.data.message) {
                 toast.error(error.response.data.message);
             }
@@ -60,7 +61,7 @@ const Product_List = ({ item, settrackproducts, trackproducts }) => {
                             >
                                 ✏️ Edit
                             </button>
-                            <button className="block w-full text-left px-4 py-2 hover:bg-gray-100" onClick={() => DeleteProduct(item.id)}>
+                            <button className="block w-full text-left px-4 py-2 hover:bg-gray-100" onClick={() => DeleteProduct(item._id)}>
                                 🗑️ Delete
                             </button>
                         </div>

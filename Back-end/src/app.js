@@ -4,23 +4,12 @@ import Productrouter from './routes/Product.routes.js'
 import SellerRoutes from './routes/Seller.routes.js'
 import UserRoutes from './routes/User.routes.js';
 import OTPRoutes from './routes/otp.routes.js';
-import { OTPModel } from './model/Otp.model.js';
 import cors from 'cors'
 import WishlistRoutes from './routes/Wishlist.routes.js';
 import CartRoutes from './routes/Cart.routes.js';
 import AddressRoutes from './routes/Address.routes.js';
 
 const app = express()
-
-async function setupIndexes() {
-  try {
-    await OTPModel.createIndexes({ createdAt: 1 }, { expireAfterSeconds: 600 });
-    console.log("TTL index applied for OTPs ✅");
-  } catch (err) {
-    console.error("Error creating TTL index:", err);
-  }
-}
-setupIndexes()
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
