@@ -15,12 +15,10 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
 app.use(cors({
-  origin: [
-    '*'
-  ],
-  
+  origin: ['https://luxora-puce.vercel.app'], // Allow only your frontend
   credentials: true
-}))
+}));
+
 
 app.use('/api/user', UserRoutes)
 app.use('/api/product', Productrouter)
