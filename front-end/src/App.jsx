@@ -11,6 +11,7 @@ import Become_Seller from './Pages/Become_Seller'
 import Seller_Dashboard from './Pages/Seller_Dashboard'
 import Product from './Pages/Product'
 import Cart from './Pages/Cart'
+import Place_Order from './Pages/Place_Order'
 
 const App = () => {
   return (
@@ -26,6 +27,7 @@ const App = () => {
         <Route path='/dashboard' element={<Seller_Dashboard />} />
         <Route path='/product/:id' element={<Product />} />
         <Route path='/cart' element={<Cart />} />
+        <Route path='/place_order' element={<Place_Order />} />
       </Routes>
       <ToastContainer
         position="top-right"

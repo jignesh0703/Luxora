@@ -72,11 +72,41 @@ const RegistorSeller = async (req, res) => {
         return res.status(200).json({ message: 'Registration Succesfully to Seller Account!' })
 
     } catch (error) {
-        console.log(error)
+        return res.status(500).json({ message: 'Somthing wrong try again!' })
+    }
+}
+
+const Updatedata = async (req, res) => {
+    try {
+        const user = req.user._id
+        const { fullname, number, email } = req.body
+
+        const FindSeller = await SellerModel.findOne({ user_id: user })
+        if (!FindSeller) {
+            return res.status(404).json({ message: 'Seller not found!' });
+        }
+
+        if (fullname) {
+            FindSeller.fullname = fullname
+        }
+
+        if (number) {
+            FindSeller.number = number
+        }
+
+        if (email) {
+            FindSeller.email = email
+        }
+
+        await FindSeller.save()
+        return res.status(200).json({ message: 'Profile updated successfully', seller: FindSeller });
+
+    } catch (error) {
         return res.status(500).json({ message: 'Somthing wrong try again!' })
     }
 }
 
 export {
     RegistorSeller,
+    Updatedata
 }

@@ -4,12 +4,14 @@ import { StoreContext } from '../context/Context'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import PriceDetail from '../component/Cart/PriceDetail'
+import { useNavigate } from 'react-router-dom'
 
 const Cart = () => {
 
-    const { apiURL } = useContext(StoreContext)
+    const { apiURL, setPlace_Orders } = useContext(StoreContext)
     const [CartData, setCartData] = useState([])
     const [trackcart, settrackcart] = useState(false)
+    const Navigate = useNavigate()
 
     useEffect(() => {
         const FetchCart = async () => {
@@ -18,6 +20,7 @@ const Cart = () => {
                     withCredentials: true
                 })
                 setCartData(response.data.FindUser.Products)
+                setPlace_Orders(response.data.FindUser.Products)
             } catch (error) {
                 if (error.response && error.response.data && error.response.data.message) {
                     toast.error(error.response.data.message);
@@ -49,7 +52,7 @@ const Cart = () => {
                             CartData?.length > 0
                             && <div className='py-4 flex justify-end bottom-0 sticky bg-white shadow-md border-t border'>
                                 <div className='px-4'>
-                                    <button className='w-[15rem] h-[3rem] bg-[#fb641b] text-white font-semibold'>PLACE ORDER</button>
+                                    <button className='w-[15rem] h-[3rem] bg-[#fb641b] text-white font-semibold' onClick={() => Navigate('/place_order')}>PLACE ORDER</button>
                                 </div>
                             </div>
                         }

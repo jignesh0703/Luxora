@@ -7,7 +7,7 @@ const ContextProvider = ({ children }) => {
 
     const [userdata, setuserdata] = useState(null)
     const [trackuserdata, settrackuserdata] = useState(false)
-    const apiURL = 'https://luxora-e21q.vercel.app'
+    const apiURL = 'http://localhost:3000'
 
     const FetchUserData = useCallback(async () => {
         try {
@@ -24,11 +24,15 @@ const ContextProvider = ({ children }) => {
         FetchUserData()
     }, [trackuserdata])
 
+    const [Place_Orders, setPlace_Orders] = useState(null)
+
     const StoreData = {
         apiURL,
         trackuserdata,
         settrackuserdata,
         userdata,
+        Place_Orders,
+        setPlace_Orders
     }
 
     return (

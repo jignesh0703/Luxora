@@ -69,7 +69,7 @@ const Product_List = ({ item, settrackproducts, trackproducts }) => {
                 </div>
             </div>
             {
-                showUpdate && <Update_Products item={item} />
+                showUpdate && <Update_Products item={item} setshowUpdate={setshowUpdate} settrackproducts={settrackproducts} trackproducts={trackproducts} />
             }
         </>
     )

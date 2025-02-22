@@ -20,7 +20,6 @@ const Manage_product = () => {
     FetchProducts()
   }, [trackproducts])
 
-
   return (
     <>
       <div className="mt-4 pb-10">

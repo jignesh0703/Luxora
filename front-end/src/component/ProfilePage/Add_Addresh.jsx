@@ -4,7 +4,7 @@ import { StoreContext } from '../../context/Context'
 import { toast } from 'react-toastify'
 import { Oval } from "react-loader-spinner";
 
-const Add_Addresh = ({ setsawAdd_Addresh,settrakcaddresh,trakcaddresh }) => {
+const Add_Addresh = ({ setsawAdd_Addresh, settrakcaddresh, trakcaddresh }) => {
 
     const [isLoading, setisLoading] = useState(false)
     const { apiURL } = useContext(StoreContext)

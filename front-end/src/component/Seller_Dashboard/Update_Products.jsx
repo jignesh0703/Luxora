@@ -1,7 +1,11 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
+import { StoreContext } from '../../context/Context'
+import axios from 'axios'
+import { toast } from 'react-toastify'
 
-const Update_Products = ({ item }) => {
+const Update_Products = ({ item, trackproducts, settrackproducts, setshowUpdate }) => {
 
+    const { apiURL } = useContext(StoreContext)
     const [focusedFields, setfocusedFields] = useState({})
     const [sawFields, setsawFields] = useState({})
     const SawAllFields = (field) => {
@@ -43,6 +47,22 @@ const Update_Products = ({ item }) => {
 
     const SubmitHandler = async (e) => {
         e.preventDefault()
+
+        try {
+            const response = await axios.post(`${apiURL}/api/product/update/${item._id}`, formdata, {
+                withCredentials: true,
+                headers: {
+                    "Content-Type": 'application/json'
+                }
+            })
+            setshowUpdate(false)
+            settrackproducts(!trackproducts)
+            toast.success(response.data.message)
+        } catch (error) {
+            if (error.response && error.response.data && error.response.data.message) {
+                toast.error(error.response.data.message);
+            }
+        }
     }
 
     return (

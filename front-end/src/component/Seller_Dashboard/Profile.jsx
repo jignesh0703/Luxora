@@ -1,12 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { StoreContext } from '../../context/Context'
+import { toast } from 'react-toastify'
+import axios from 'axios'
 
 const Profile = () => {
 
-  const { userdata } = useContext(StoreContext)
+  const { userdata, apiURL } = useContext(StoreContext)
   const [infodisable, setinfodisable] = useState(true)
   const [addreshDisable, setaddreshDisable] = useState(true)
   const [mobileDisable, setmobileDisable] = useState(true)
+  const [trackdata, settrackdata] = useState(false)
   const [formdata, setformdata] = useState({
     fullname: '',
     email: '',
@@ -31,9 +34,35 @@ const Profile = () => {
     })
   }
 
-  const SubmitHandler = (e) => {
+  const hasUserChanged = () => {
+    return (
+      formdata.fullname !== (userdata?.Seller?.fullname || '') ||
+      formdata.number !== (userdata?.Seller?.number || '') ||
+      formdata.email !== (userdata?.Seller?.email || '')
+    );
+  };
+
+  const SubmitHandler = async(e) => {
     e.preventDefault()
-    console.log('formdata : ', formdata)
+
+    if (!hasUserChanged()) {
+      return toast.error("Don't make any changes");
+    }
+
+    try {
+      const response = await axios.post(`${apiURL}/api/seller/updatedata`,formdata,{
+        withCredentials :true,
+        headers : {
+          "Content-Type" : 'application/json'
+        }
+      })
+      toast.success(response.data.message)
+      settrackdata(!trackdata)
+    } catch (error) {
+      if (error.response && error.response.data && error.response.data.message) {
+        toast.error(error.response.data.message);
+      }
+    }
     setinfodisable(true)
     setaddreshDisable(true)
     setmobileDisable(true)
