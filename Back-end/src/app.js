@@ -15,7 +15,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
 app.use(cors({
-  origin: ['https://luxora-puce.vercel.app'], // Allow only your frontend
+  origin: 'https://luxora-puce.vercel.app',
   credentials: true
 }));
 
