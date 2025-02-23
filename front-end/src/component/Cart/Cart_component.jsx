@@ -67,8 +67,8 @@ const Cart_component = ({ item, settrackcart, trackcart }) => {
               <h1 className='mt-2 font-semibold truncate whitespace-nowrap overflow-hidden'>{item.product_id.name}</h1>
             </div>
             <div className='flex gap-2 mt-2 items-end'>
-              <h1 className='font-semibold text-[1.1rem] text-gray-500 line-through'>₹{(item.product_id.offer_price)?.toLocaleString('en-IN')}</h1>
-              <h1 className='font-semibold text-[1.5rem]'>₹{(item.product_id.price)?.toLocaleString('en-IN')}</h1>
+              <h1 className='font-semibold text-[1.1rem] text-gray-500 line-through'>₹{(item.product_id.price)?.toLocaleString('en-IN')}</h1> 
+              <h1 className='font-semibold text-[1.5rem]'>₹{(item.product_id.offer_price)?.toLocaleString('en-IN')}</h1>
               <h1 className='font-semibold text-[1.1rem] text-[#388e3c]'>{CalculateRate()}% off</h1>
             </div>
           </div>

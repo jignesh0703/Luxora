@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Select_Address = ({ Address_Data, MainAddress, setMainAddress, setsawFirst_Part }) => {
+const Select_Address = ({ Address_Data, MainAddress, setMainAddress, setsawFirst_Part, setgetAddress }) => {
 
     return (
         <div className='flex flex-col'>
@@ -14,7 +14,10 @@ const Select_Address = ({ Address_Data, MainAddress, setMainAddress, setsawFirst
                                 type="radio"
                                 name="selectedAddress"
                                 checked={MainAddress === address}
-                                onChange={() => setMainAddress(address)}
+                                onChange={() => {
+                                    setMainAddress(address)
+                                    setgetAddress(address._id)
+                                }}
                                 className='cursor-pointer w-[1.1rem] h-[1.1rem]'
                             />
                             <div className='flex flex-col'>

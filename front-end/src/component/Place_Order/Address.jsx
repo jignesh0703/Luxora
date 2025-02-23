@@ -7,7 +7,7 @@ import Select_Address from './Select_Address';
 import { FaPlus } from "react-icons/fa6";
 import Add_Addresh from '../../component/ProfilePage/Add_Addresh'
 
-const Address = () => {
+const Address = ({ setgetAddress }) => {
 
     const { apiURL } = useContext(StoreContext)
     const [trakcaddresh, settrakcaddresh] = useState(false)
@@ -25,6 +25,7 @@ const Address = () => {
                 setAddress_Data(response.data.FindUser.address)
                 if (response.data.FindUser.address.length > 0) {
                     setMainAddress(response.data.FindUser.address[response.data.FindUser.address.length - 1])
+                    setgetAddress(response.data.FindUser.address[response.data.FindUser.address.length - 1]._id)
                 }
             } catch (error) {
                 if (error.response && error.response.data && error.response.data.message) {
@@ -68,7 +69,7 @@ const Address = () => {
             </div>
             {
                 sawFirst_Part && <div className='bg-white'>
-                    <Select_Address Address_Data={Address_Data} MainAddress={MainAddress} setMainAddress={setMainAddress} setsawFirst_Part={setsawFirst_Part} />
+                    <Select_Address Address_Data={Address_Data} MainAddress={MainAddress} setMainAddress={setMainAddress} setsawFirst_Part={setsawFirst_Part} setgetAddress={setgetAddress} />
                 </div>
             }
             {

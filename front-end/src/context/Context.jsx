@@ -25,6 +25,7 @@ const ContextProvider = ({ children }) => {
     }, [trackuserdata])
 
     const [Place_Orders, setPlace_Orders] = useState(null)
+    const [isCartUsed, setisCartUsed] = useState(false)
 
     const StoreData = {
         apiURL,
@@ -32,7 +33,9 @@ const ContextProvider = ({ children }) => {
         settrackuserdata,
         userdata,
         Place_Orders,
-        setPlace_Orders
+        setPlace_Orders,
+        isCartUsed,
+        setisCartUsed
     }
 
     return (

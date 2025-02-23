@@ -15,7 +15,7 @@ const Product = () => {
     const [AlreadyInCart, setAlreadyInCart] = useState(false)
     const [AddLike, setAddLike] = useState(null)
     const navigate = useNavigate()
-    const { apiURL, userdata } = useContext(StoreContext)
+    const { apiURL, userdata, setPlace_Orders } = useContext(StoreContext)
     const { id } = useParams()
 
     useEffect(() => {
@@ -79,7 +79,7 @@ const Product = () => {
                 withCredentials: true
             })
             setAlreadyInCart(response.data.Alreadyin)
-            if(AlreadyInCart){
+            if (AlreadyInCart) {
                 navigate('/cart')
             }
             toast.success(response.data.message)
@@ -88,6 +88,11 @@ const Product = () => {
                 toast.error(error.response.data.message);
             }
         }
+    }
+
+    const GetOrder_Data = () => {
+        setPlace_Orders(Product_Data)
+        navigate('/place_order')
     }
 
     return (
@@ -128,7 +133,7 @@ const Product = () => {
                                         AlreadyInCart ? <h1>GOING TO CART</h1> : <h1>ADD TO CART</h1>
                                     }
                                 </button>
-                                <button className='flex items-center justify-center gap-2 text-[1.2rem] bg-[#fb641b] text-white w-[14rem] font-semibold'>
+                                <button className='flex items-center justify-center gap-2 text-[1.2rem] bg-[#fb641b] text-white w-[14rem] font-semibold' onClick={GetOrder_Data}>
                                     <AiFillThunderbolt className='text-[1.5rem]' />
                                     <h1>BUY NOW</h1>
                                 </button>

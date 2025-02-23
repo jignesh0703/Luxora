@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom'
 
 const Cart = () => {
 
-    const { apiURL, setPlace_Orders } = useContext(StoreContext)
+    const { apiURL, setPlace_Orders, setisCartUsed } = useContext(StoreContext)
     const [CartData, setCartData] = useState([])
     const [trackcart, settrackcart] = useState(false)
     const Navigate = useNavigate()
@@ -20,7 +20,6 @@ const Cart = () => {
                     withCredentials: true
                 })
                 setCartData(response.data.FindUser.Products)
-                setPlace_Orders(response.data.FindUser.Products)
             } catch (error) {
                 if (error.response && error.response.data && error.response.data.message) {
                     toast.error(error.response.data.message);
@@ -29,6 +28,12 @@ const Cart = () => {
         }
         FetchCart()
     }, [trackcart])
+
+    const GetOrder_Data = () => {
+        setPlace_Orders(CartData)
+        setisCartUsed(true)
+        Navigate('/place_order')
+    }
 
     return (
         <>
@@ -52,7 +57,7 @@ const Cart = () => {
                             CartData?.length > 0
                             && <div className='py-4 flex justify-end bottom-0 sticky bg-white shadow-md border-t border'>
                                 <div className='px-4'>
-                                    <button className='w-[15rem] h-[3rem] bg-[#fb641b] text-white font-semibold' onClick={() => Navigate('/place_order')}>PLACE ORDER</button>
+                                    <button className='w-[15rem] h-[3rem] bg-[#fb641b] text-white font-semibold' onClick={GetOrder_Data}>PLACE ORDER</button>
                                 </div>
                             </div>
                         }

@@ -2,7 +2,7 @@ import React from 'react'
 
 const PriceDetail = ({ CartData }) => {
 
-    const TotalPrice = CartData.reduce((total, item) => total + item.product_id.price * item.quantity, 0)
+    const TotalPrice = CartData.reduce((total, item) => total + item.product_id.offer_price * item.quantity, 0)
 
     const Discount = Math.round(TotalPrice * 0.1)
 
@@ -29,7 +29,6 @@ const PriceDetail = ({ CartData }) => {
             </g>
             <path fill="#000" opacity=".02" mask="url(#c)" d="M14.5-1h16v38h-16z" />
         </g></svg>
-
 
     return (
         <>
