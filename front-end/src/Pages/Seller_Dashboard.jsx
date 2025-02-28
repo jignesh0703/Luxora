@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { StoreContext } from '../context/Context'
 import { BsFillPersonFill } from 'react-icons/bs'
 import { FaChevronRight, FaWallet } from 'react-icons/fa6'
@@ -14,10 +14,14 @@ import Orders from '../component/Seller_Dashboard/Orders';
 import Order_Status from '../component/Seller_Dashboard/Order_Status';
 import Earning from '../component/Seller_Dashboard/Earning';
 import Support from '../component/Seller_Dashboard/Support';
+import { toast } from 'react-toastify';
+import axios from 'axios';
 
 const Seller_Dashboard = () => {
 
-    const { userdata } = useContext(StoreContext)
+    const { userdata, apiURL } = useContext(StoreContext)
+    const [trackorder, settrackorder] = useState(false)
+    const [Order_Data, setOrder_Data] = useState(null)
     const Profileicon = <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width={50} height={50} viewBox="0 0 50 50" >
         <defs>
             <path id="a" d="M50 0v50H0V0z" />
@@ -41,16 +45,32 @@ const Seller_Dashboard = () => {
     </svg>
     const Componets = {
         profile: <Profile />,
-        dashboard: <Dashboard />,
+        dashboard: <Dashboard Order_Data={Order_Data} />,
         add_product: <Add_Product />,
         manage_product: <Manage_product />,
-        orders: <Orders />,
-        order_status: <Order_Status />,
+        orders: <Orders Order_Data={Order_Data} />,
+        order_status: <Order_Status Order_Data={Order_Data} trackorder={trackorder} settrackorder={settrackorder}/>,
         earning: <Earning />,
         support: <Support />
     }
 
     const [ActiveComponent, setActiveComponent] = useState('profile')
+
+    const GetOrders = async () => {
+        try {
+            const response = await axios.get(`${apiURL}/api/order/getseller`, {
+                withCredentials: true
+            })
+            setOrder_Data(response.data.FindOrder)
+        } catch (error) {
+            if (error.response && error.response.data && error.response.data.message) {
+                toast.error(error.response.data.message);
+            }
+        }
+    }
+    useEffect(() => {
+        GetOrders()
+    }, [apiURL, trackorder])
 
     return (
         <>
@@ -68,7 +88,7 @@ const Seller_Dashboard = () => {
                         </div>
                         <div className='w-[18rem] bg-white shadow-md'>
                             <div className='flex border-b border-gray-300 px-4 py-4 flex-col'>
-                                <div className={` flex gap-4 items-center font-bold ${ActiveComponent === 'profile' ? 'text-black bg-gray-100' : 'text-gray-500'} `} onClick={()=>setActiveComponent('profile')}>
+                                <div className={` flex gap-4 items-center font-bold ${ActiveComponent === 'profile' ? 'text-black bg-gray-100' : 'text-gray-500'} `} onClick={() => setActiveComponent('profile')}>
                                     <BsFillPersonFill className='text-[1.8rem] text-black' />
                                     <div className='w-full flex items-center justify-between group cursor-pointer transition duration-300'>
                                         <h1 className='group-hover:text-[#131921]'>Seller Profile</h1>
@@ -77,7 +97,7 @@ const Seller_Dashboard = () => {
                                 </div>
                             </div>
                             <div className='flex border-b border-gray-300 px-4 py-4 flex-col'>
-                                <div className={` flex gap-4 items-center font-bold ${ActiveComponent === 'dashboard' ? 'text-black bg-gray-100' : 'text-gray-500'} `} onClick={()=>setActiveComponent('dashboard')}>
+                                <div className={` flex gap-4 items-center font-bold ${ActiveComponent === 'dashboard' ? 'text-black bg-gray-100' : 'text-gray-500'} `} onClick={() => setActiveComponent('dashboard')}>
                                     <MdSpaceDashboard className='text-[2rem] text-black' />
                                     <div className='w-full flex items-center justify-between group cursor-pointer transition duration-300'>
                                         <h1 className='group-hover:text-[#131921]'>Dashboard</h1>
@@ -92,8 +112,8 @@ const Seller_Dashboard = () => {
                                     </a>
                                 </div>
                                 <div className='mt-2'>
-                                    <h1 className={`pl-10 py-2 duration-200 cursor-pointer ${ActiveComponent === 'add_product' ? 'font-bold bg-gray-100' : ''} `} onClick={()=>setActiveComponent('add_product')}>Add New Product</h1>
-                                    <h1 className={`pl-10 py-2 duration-200 cursor-pointer ${ActiveComponent === 'manage_product' ? 'font-bold bg-gray-100' : ''} `} onClick={()=>setActiveComponent('manage_product')}>Manage Products</h1>
+                                    <h1 className={`pl-10 py-2 duration-200 cursor-pointer ${ActiveComponent === 'add_product' ? 'font-bold bg-gray-100' : ''} `} onClick={() => setActiveComponent('add_product')}>Add New Product</h1>
+                                    <h1 className={`pl-10 py-2 duration-200 cursor-pointer ${ActiveComponent === 'manage_product' ? 'font-bold bg-gray-100' : ''} `} onClick={() => setActiveComponent('manage_product')}>Manage Products</h1>
                                 </div>
                             </div>
                             <div className='flex border-b border-gray-300 px-4 py-4 flex-col'>
@@ -104,12 +124,12 @@ const Seller_Dashboard = () => {
                                     </a>
                                 </div>
                                 <div className='mt-2'>
-                                    <h1 className={`pl-10 py-2 duration-200 cursor-pointer ${ActiveComponent === 'orders' ? 'font-bold bg-gray-100' : ''} `} onClick={()=>setActiveComponent('orders')}>View Orders</h1>
-                                    <h1 className={`pl-10 py-2 duration-200 cursor-pointer ${ActiveComponent === 'order_status' ? 'font-bold bg-gray-100' : ''} `} onClick={()=>setActiveComponent('order_status')}>Update Order Status</h1>
+                                    <h1 className={`pl-10 py-2 duration-200 cursor-pointer ${ActiveComponent === 'orders' ? 'font-bold bg-gray-100' : ''} `} onClick={() => setActiveComponent('orders')}>View Orders</h1>
+                                    <h1 className={`pl-10 py-2 duration-200 cursor-pointer ${ActiveComponent === 'order_status' ? 'font-bold bg-gray-100' : ''} `} onClick={() => setActiveComponent('order_status')}>Update Order Status</h1>
                                 </div>
                             </div>
                             <div className='flex border-b border-gray-300 px-4 py-4 flex-col'>
-                                <div className={` flex gap-4 items-center font-bold ${ActiveComponent === 'earning' ? ' text-black bg-gray-100' : 'text-gray-500'} `} onClick={()=>setActiveComponent('earning')}>
+                                <div className={` flex gap-4 items-center font-bold ${ActiveComponent === 'earning' ? ' text-black bg-gray-100' : 'text-gray-500'} `} onClick={() => setActiveComponent('earning')}>
                                     <FaWallet className='text-[1.8rem] text-black' />
                                     <div className='w-full flex items-center justify-between group cursor-pointer transition duration-300'>
                                         <h1 className='font-bold group-hover:text-[#131921]'>Earnings & Payouts</h1>
@@ -117,7 +137,7 @@ const Seller_Dashboard = () => {
                                 </div>
                             </div>
                             <div className='flex border-b border-gray-300 px-4 py-4 flex-col'>
-                                <div className={` flex gap-4 items-center font-bold ${ActiveComponent === 'support' ? ' text-black bg-gray-100' : 'text-gray-500'} `} onClick={()=>setActiveComponent('support')}>
+                                <div className={` flex gap-4 items-center font-bold ${ActiveComponent === 'support' ? ' text-black bg-gray-100' : 'text-gray-500'} `} onClick={() => setActiveComponent('support')}>
                                     <MdSupportAgent className='text-[1.8rem] text-black' />
                                     <div className='w-full flex items-center justify-between group cursor-pointer transition-all duration-300'>
                                         <h1 className='font-bold group-hover:text-[#131921]'>Support & Notifications</h1>
@@ -127,7 +147,7 @@ const Seller_Dashboard = () => {
                         </div>
                     </div>
                     <div className='w-[50rem] bg-white shadow-md'>
-                       {Componets[ActiveComponent]}
+                        {Componets[ActiveComponent]}
                     </div>
                 </div>
             </div>

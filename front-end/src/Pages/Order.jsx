@@ -1,8 +1,13 @@
 import React from 'react'
+import Orders from '../component/Order/Order'
 
 const Order = () => {
   return (
-    <div>Order</div>
+    <>
+      <div className='w-full min-h-screen bg-[#f1f3f6] flex justify-center'>
+        <Orders />
+      </div>
+    </>
   )
 }
 

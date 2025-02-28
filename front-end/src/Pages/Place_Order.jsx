@@ -15,7 +15,6 @@ const Place_Order = () => {
   const { apiURL, Place_Orders, isCartUsed } = useContext(StoreContext)
   const [isLoading, setisLoading] = useState(false)
   const [getAddress, setgetAddress] = useState(null)
-  const [gettotal_price, setgettotal_price] = useState(null)
   const products = Array.isArray(Place_Orders) ? Place_Orders : [Place_Orders]
   const [formdata, setformdata] = useState({
     holdername: '',
@@ -33,6 +32,9 @@ const Place_Order = () => {
     if (formdata.cvv.length !== 3) {
       return toast.error('Card Number must be exactly 3 digits')
     }
+    if(!getAddress){
+      return toast.error('Please add address')
+    }
     setformdata({
       holdername: '',
       card_number: '',
@@ -41,7 +43,7 @@ const Place_Order = () => {
     })
 
     try {
-      const response = await axios.post(`${apiURL}/api/order/add`, { iscart: isCartUsed, address_id: getAddress, total_price: gettotal_price, formdata: formdata.holdername, products }, {
+      const response = await axios.post(`${apiURL}/api/order/add`, { iscart: isCartUsed, address_id: getAddress, formdata: formdata.holdername, products }, {
         withCredentials: true
       })
       toast.success(response.data.message)
@@ -75,7 +77,7 @@ const Place_Order = () => {
         </div>
         <div>
           <div className='flex justify-center mt-4'>
-            <Order_Summary products={products} setgettotal_price={setgettotal_price} />
+            <Order_Summary products={products} />
           </div>
         </div>
       </div>

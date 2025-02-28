@@ -85,33 +85,6 @@ const Navbar = () => {
               <h1 className='hidden xl:flex'>Become a Seller</h1>
             </button>
         }
-        <div className='text-white text-[1.2rem] hover:border border-white px-1 rounded-[10px] flex justify-center items-center cursor-pointer' onClick={() => setsawmodechange(!sawmodechange)}>
-          <HiDotsVertical />
-          {
-            sawmodechange
-            && <div className='absolute bg-white text-black px-2 shadow-xl rounded-[5px] py-1 mt-[7rem] ml-[-10rem] xl:mt-14 xl:ml-[-5.5rem] flex flex-col' onClick={() => setsawmodechange(false)} ref={modechange}>
-              <button className='font-semibold hover:bg-slate-200 rounded-[5px]'>Light Mode</button>
-              <hr className='bg-black w-[90%] h-[2px] rounded-full flex justify-center items-center ml-[5%] xl:hidden' />
-              <button className='justify-center items-center text-black px-2 font-semibold gap-2 py-1 flex xl:hidden hover:bg-slate-200 rounded-[5px]'>
-                <MdOutlineStorefront className='text-[1.2rem]' />
-                <h1 className='flex text-[1.1rem]'>Become a Seller</h1>
-              </button>
-              <hr className='bg-black w-[90%] h-[2px] rounded-full flex justify-center items-center ml-[5%] xl:hidden' />
-              <button className='flex justify-center items-center text-black px-2 font-semibold gap-2 text-[1.1rem] py-1 xl:hidden hover:bg-slate-200 rounded-[5px]'
-                onClick={() => {
-                  if (userdata?.user) {
-                    Navigate('/cart')
-                  } else {
-                    toast.error('Login Required!')
-                  }
-                }}
-              >
-                <IoCartOutline className='text-[1.5rem]' />
-                <h1 className='flex'>Cart</h1>
-              </button>
-            </div>
-          }
-        </div>
       </div>
     </div>
   )

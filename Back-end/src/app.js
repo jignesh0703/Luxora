@@ -20,6 +20,10 @@ app.use(cors({
   credentials: true
 }));
 
+app.use('/',(req,res)=>{
+  res.send('Connected')
+})
+
 app.use('/api/user', UserRoutes)
 app.use('/api/product', Productrouter)
 app.use('/api/seller', SellerRoutes)

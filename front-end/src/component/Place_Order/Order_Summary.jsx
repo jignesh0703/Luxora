@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { IoBagOutline } from "react-icons/io5";
 
-const Order_Summary = ({ products, setgettotal_price }) => {
+const Order_Summary = ({ products }) => {
 
     const totalPrice = products?.reduce(
         (acc, item) => acc + (item?.quantity || 1) * (item?.offer_price || item?.product_id?.offer_price),

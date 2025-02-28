@@ -40,6 +40,11 @@ const OrderSchema = new mongoose.Schema(
             type: String,
             enum: ["Processing", "Shipped", "OutForDelivery", "Delivered", "Cancelled"],
             default: 'Processing'
+        },
+        seller_id : {
+            type : mongoose.Types.ObjectId,
+            ref : 'User',
+            required : true
         }
     },
     {

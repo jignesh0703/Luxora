@@ -18,7 +18,7 @@ const AddToCart = async (req, res) => {
                 ]
             })
             await cart.save()
-            return res.status(200).json({ message: 'Products Added To Cart', Alreadyin : true })
+            return res.status(200).json({ message: 'Products Added To Cart', Alreadyin: true })
         } else {
             const productExists = FindUser.Products.some(
                 (item) => item.product_id.toString() === productid.toString()
@@ -27,9 +27,9 @@ const AddToCart = async (req, res) => {
             if (!productExists) {
                 FindUser.Products.push({ product_id: productid, quantity: 1 });
                 await FindUser.save();
-                return res.status(200).json({ message: "Product added to cart!" , Alreadyin : true });
+                return res.status(200).json({ message: "Product added to cart!", Alreadyin: true });
             } else {
-                return res.status(200).json({ message: "Product is Already in cart!" , Alreadyin : true });
+                return res.status(200).json({ message: "Product is Already in cart!", Alreadyin: true });
             }
 
         }
@@ -120,19 +120,20 @@ const DecreaseQuantity = async (req, res) => {
     }
 }
 
-const GetCart = async (req,res) => {
+const GetCart = async (req, res) => {
     try {
         const user = req.user._id
-        const FindUser = await CartModel.findOne({user_id : user}).populate('Products.product_id', 'name images price offer_price')
+        const FindUser = await CartModel
+            .findOne({ user_id: user })
+            .populate('Products.product_id', 'name images price offer_price seller_id')
 
-        if(!FindUser){
+        if (!FindUser) {
             return res.status(200).json({ message: "User Not Found", FindUser });
         } else {
             return res.status(200).json({ message: "User Cart Fetched Successfully!", FindUser });
         }
 
     } catch (error) {
-        console.log(error)
         return res.status(500).json({ message: "Somthing wrong try again!" })
     }
 }
