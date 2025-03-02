@@ -25,7 +25,7 @@ const Product = () => {
                     withCredentials: false
                 })
                 setProduct_Data(response.data.FindProduct)
-                if (response.data.FindProduct?.images.length > 0) {
+                if (response.data.FindProduct?.images?.length > 0) {
                     setMainImage(response.data.FindProduct.images[0])
                 }
             } catch (error) {
