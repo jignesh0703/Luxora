@@ -9,6 +9,7 @@ import WishlistRoutes from './routes/Wishlist.routes.js';
 import CartRoutes from './routes/Cart.routes.js';
 import AddressRoutes from './routes/Address.routes.js';
 import OrderRoutes from './routes/Order.routes.js';
+import RateRoutes from './routes/Rate.routes.js';
 
 const app = express()
 
@@ -20,10 +21,6 @@ app.use(cors({
   credentials: true
 }));
 
-app.use('/',(req,res)=>{
-  res.send('Connected')
-})
-
 app.use('/api/user', UserRoutes)
 app.use('/api/product', Productrouter)
 app.use('/api/seller', SellerRoutes)
@@ -32,5 +29,6 @@ app.use('/api/wishlist', WishlistRoutes)
 app.use('/api/cart', CartRoutes)
 app.use('/api/address', AddressRoutes)
 app.use('/api/order', OrderRoutes)
+app.use('/api/rate', RateRoutes)
 
 export default app

@@ -97,7 +97,7 @@ const Product = () => {
 
     return (
         <>
-            <div className='bg-[#f1f3f6] w-full h-screen flex justify-center'>
+            <div className='bg-[#f1f3f6] w-full min-h-screen flex justify-center'>
                 <div className='bg-white h-max shadow-md p-2 w-[70%]'>
                     <div className='mt-4 flex gap-6 ml-4'>
                         <div className='flex flex-col'>

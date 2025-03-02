@@ -127,23 +127,7 @@ const Seller_Dashboard = () => {
                                     <h1 className={`pl-10 py-2 duration-200 cursor-pointer ${ActiveComponent === 'orders' ? 'font-bold bg-gray-100' : ''} `} onClick={() => setActiveComponent('orders')}>View Orders</h1>
                                     <h1 className={`pl-10 py-2 duration-200 cursor-pointer ${ActiveComponent === 'order_status' ? 'font-bold bg-gray-100' : ''} `} onClick={() => setActiveComponent('order_status')}>Update Order Status</h1>
                                 </div>
-                            </div>
-                            <div className='flex border-b border-gray-300 px-4 py-4 flex-col'>
-                                <div className={` flex gap-4 items-center font-bold ${ActiveComponent === 'earning' ? ' text-black bg-gray-100' : 'text-gray-500'} `} onClick={() => setActiveComponent('earning')}>
-                                    <FaWallet className='text-[1.8rem] text-black' />
-                                    <div className='w-full flex items-center justify-between group cursor-pointer transition duration-300'>
-                                        <h1 className='font-bold group-hover:text-[#131921]'>Earnings & Payouts</h1>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className='flex border-b border-gray-300 px-4 py-4 flex-col'>
-                                <div className={` flex gap-4 items-center font-bold ${ActiveComponent === 'support' ? ' text-black bg-gray-100' : 'text-gray-500'} `} onClick={() => setActiveComponent('support')}>
-                                    <MdSupportAgent className='text-[1.8rem] text-black' />
-                                    <div className='w-full flex items-center justify-between group cursor-pointer transition-all duration-300'>
-                                        <h1 className='font-bold group-hover:text-[#131921]'>Support & Notifications</h1>
-                                    </div>
-                                </div>
-                            </div>
+                            </div>                         
                         </div>
                     </div>
                     <div className='w-[50rem] bg-white shadow-md'>
