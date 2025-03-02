@@ -81,7 +81,7 @@ const Reviews = ({ Product_Data }) => {
                     })
                 }
                 {
-                    AllReviwes.length === 0 && <h1 className='py-[2rem] flex justify-center text-[1.5rem] font-semibold'>No Reviews are added</h1>
+                    AllReviwes?.length === 0 && <h1 className='py-[2rem] flex justify-center text-[1.5rem] font-semibold'>No Reviews are added</h1>
                 }
             </div>
         </div>
